@@ -134,7 +134,7 @@ button:focus-visible {
 }
 
 #floorplanner {
-  display: none;
+  /* display: none; */
 }
 
 #add-items {
