@@ -29,7 +29,7 @@ import { onMounted, getCurrentInstance, ComponentInternalInstance } from "vue";
 import { NSpace, NLayout, NLayoutContent, NLayoutSider, NH2, NCollapse, NCollapseItem } from "naive-ui"
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-
+const _this = proxy;
 const init = () => {
   if (proxy != null) {
     let canvasElement = proxy.$el.querySelector("#floorplanner-canvas");
