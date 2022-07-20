@@ -1,9 +1,13 @@
-// namespace BP3D {
+export namespace KQDesign {
+  
+  
+  
+  
   const gridSpacing: number = 20;
   const gridWidth: number = 1;
   const gridColor: string = "#f1f1f1";
-
-  export class Floorplanner {
+  
+  export class Designer {
     private canvasElement: HTMLCanvasElement;
 
     private context: CanvasRenderingContext2D | null;
@@ -83,6 +87,7 @@
       for(let y = 0; y < (height / gridSpacing); y++){
         this.drawLine(0, gridSpacing * y + offsetY, width, gridSpacing * y + offsetY, gridWidth, gridColor);
       }
+      // this.drawLine(0, 0, 100, 100, 2, gridColor);
     }
   }
-// }
+}
