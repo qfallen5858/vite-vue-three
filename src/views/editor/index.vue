@@ -50,14 +50,14 @@
 <script setup lang="ts">
 import { ref, onMounted, getCurrentInstance, ComponentInternalInstance } from "vue";
 import {Floorplanner} from '../../libs/floorplanner/floorplanner';
-import {KQDesign} from '../../libs/design2d/designer'
+import {Designer} from '../../libs/design2d/designer'
 const floorplannerDiv = ref(null);
 const floorplannerCanvas = ref(null);
 const init = () => {
   // if (floorplannerCanvas.value && floorplannerDiv.value) {
-  floorplannerDiv.value.style.height = (window.innerHeight - floorplannerDiv.value.offsetTop * 2) + 'px'
+  floorplannerDiv.value!.style.height = (window.innerHeight - floorplannerDiv.value!.offsetTop * 2) + 'px'
   // }
-  new KQDesign.Designer("floorplanner-canvas");
+  new Designer("floorplanner-canvas");
 }
 
 onMounted(init);
