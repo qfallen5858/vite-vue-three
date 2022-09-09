@@ -27,7 +27,7 @@
     <el-container>
       <el-aside width="200px">
         <el-collapse accordion>
-          <el-collapse-item title="Edit FloorPlan" name="1">
+          <el-collapse-item title="指标库" name="1">
             <div>test</div>
           </el-collapse-item>
           <el-collapse-item title="Design" name="2">
