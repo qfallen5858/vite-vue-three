@@ -1,9 +1,9 @@
 interface DataParam {}
 
-
+type CustomFunc = ()=>void
 
 export class Callbacker {
-  private callbacks: Function[] = [];
+  private callbacks: CustomFunc[] = [];
 
   public constructor(){
 
@@ -15,17 +15,22 @@ export class Callbacker {
 //     // }
 //   }
 
-  public add(callback: Function): void{
+  public fire(){
+    for(let callback of this.callbacks){
+      callback()
+    }
+  }
+  public add(callback: CustomFunc): void{
     this.callbacks.push(callback);
   }
 
-  public remove(callback: Function):void{ // 可以修改为返回Function
+  public remove(callback: CustomFunc):void{ // 可以修改为返回Function
     
   }
 
-  public fire(...argArray: any[]):void{
+  // public fire(...argArray: any[]):void{
     
-  }
+  // }
 
 
 }

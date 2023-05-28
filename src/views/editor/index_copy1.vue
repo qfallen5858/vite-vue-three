@@ -1,7 +1,7 @@
 <template>
-  <div style="height: 100%;width: 100%;">
-    <el-container style="height:100%; width:100%;">
-      <el-aside width="20%">
+  <div class="common-layout">
+    <el-container>
+      <el-aside width="200px">
         <el-collapse accordion>
           <el-collapse-item title="指标库" name="1">
             <div>test</div>
@@ -15,20 +15,18 @@
         </el-collapse>
       </el-aside>
       <el-main>
-        <View3d/>
-        <!-- <div id="floorplanner" ref="floorplannerDiv">
+        <div id="floorplanner" ref="floorplannerDiv">
           <canvas id="floorplanner-canvas" ref="floorplannerCanvas"></canvas>
-        </div> -->
+        </div>
       </el-main>
     </el-container>
   </div>
 </template>
 
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, getCurrentInstance, ComponentInternalInstance } from "vue";
 import {Floorplanner} from '../../libs/floorplanner/floorplanner';
 import {Designer} from '../../libs/design2d/designer'
-
 const floorplannerDiv = ref(null);
 const floorplannerCanvas = ref(null);
 const init = () => {
@@ -39,34 +37,7 @@ const init = () => {
 }
 
 onMounted(init);
-</script> -->
-
-<script lang="ts">
-import View3d from "comps/Viewer3d.vue"
-import {Floorplanner} from '../../libs/floorplanner/floorplanner';
-import {Designer} from '../../libs/design2d/designer'
-export default{
-  components:{
-    View3d
-  },
-  data(){
-    return {
-      floorPlannerDiv: undefined,
-      floorPlannerCanvas:undefined
-    }
-  },
-  mounted(){
-    this.init();
-  },
-  methods:{
-    init(){
-      // new Designer("floorplanner-canvas")
-    }
-  }
-
-}
 </script>
-
 
 <style>
 </style>

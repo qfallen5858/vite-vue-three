@@ -130,7 +130,7 @@ button:focus-visible {
  */
 
 #viewer {
-  display: none;
+  /* display: none; */
 }
 
 #floorplanner {

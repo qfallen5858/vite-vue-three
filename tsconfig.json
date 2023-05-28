@@ -13,6 +13,12 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "types": ["naive-ui/volar", "element-plus/global"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*":["src/*"],
+      "comps/*":["src/components/*"],
+      "views/*":["src/views/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
