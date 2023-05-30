@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { SkyBox } from './skybox';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-
+import {Callbacker} from "../core/callback"
 interface ThreeOptions{
   resize?: boolean;
   pushHref?: boolean;
@@ -18,6 +18,13 @@ export class Main{
   private scene!:THREE.Scene;
   private skyBox!: SkyBox;
   private controls!: OrbitControls;
+
+  private itemSelectedCallbacker:Callbacker = new Callbacker();
+  private itemUnselectedCallbacker:Callbacker = new Callbacker();
+
+  private domElement!:HTMLElement;
+
+  private needUpdate:Boolean = false;
   
   private options: ThreeOptions = {
     resize:true,
@@ -34,8 +41,8 @@ export class Main{
   private _init(){
     // Three.ImageUtils.crossOrigin = ''
     this.scene = new THREE.Scene();
-    const domElement:HTMLElement = document.getElementById(this.options.domSelector) as HTMLElement;
-    if(domElement != null){
+    this.domElement = document.getElementById(this.options.domSelector) as HTMLElement;
+    if(this.domElement == null){
       throw new Error('domElement is null or undefined');
     }
     this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
@@ -50,6 +57,42 @@ export class Main{
     this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
     this.skyBox = new SkyBox(this.scene);
-    this.controls = new OrbitControls(this.camera, domElement);
+    this.controls = new OrbitControls(this.camera, this.domElement);
+
+    this.domElement.appendChild(this.renderer.domElement);
+
+    this.updateWindowSize();
+    if(this.options.resize){
+      window.onresize = this.updateWindowSize as (ev:UIEvent) => any
+    }
+
+    
+  }
+
+  private render() :void{}
+
+  private animate():void{
+    const delay:number = 50;
+    setTimeout(()=>{
+      requestAnimationFrame(this.animate)
+    },delay);
+    this.render()
+  }
+  private updateWindowSize():void{
+    const heightMargin:number = this.domElement.offsetTop;
+    const widthMargin:number = this.domElement.offsetLeft;
+
+    const elementWidth:number = this.domElement.clientWidth;
+    let elementHeight:number;
+    if(this.options.resize){
+      elementHeight = window.innerHeight - heightMargin
+    }else{
+      elementHeight = this.domElement.clientHeight
+    }
+    this.camera.aspect = elementWidth / elementHeight;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(elementWidth, elementHeight);
+    this.needUpdate = true;
   }
 }
