@@ -23,6 +23,7 @@ export class Main{
   private itemUnselectedCallbacker:Callbacker = new Callbacker();
 
   private domElement!:HTMLElement;
+  private lastRender!:number;
 
   private needUpdate:Boolean = false;
   
@@ -69,7 +70,17 @@ export class Main{
     
   }
 
-  private render() :void{}
+  private shouldRender():boolean {
+    if(this.needUpdate) return true
+    return false;
+  }
+
+  private render() :void{
+    if(this.shouldRender()){
+      // this.renderer.clear();
+    }
+    this.lastRender = Date.now();
+  }
 
   private animate():void{
     const delay:number = 50;
