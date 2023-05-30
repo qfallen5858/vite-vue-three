@@ -1,5 +1,5 @@
 <template>
-  <div id="viewer" style="display: block;">
+  <div id="three-container" style="display: block;">
     <div id="main-controls">
       <el-button>新建</el-button>
       <el-button>保存</el-button>
@@ -27,9 +27,12 @@
 </template>
 
 <script lang="ts">
+import {Main} from "./../libs/three/main"
 export default{
   data() { return {}},
-  mounted(){ },
+  mounted(){
+    new Main();
+   },
   methods:{}
 }
 </script>

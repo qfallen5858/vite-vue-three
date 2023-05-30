@@ -33,7 +33,7 @@ export class Main{
     spin:true,
     spinSpeed:.00002,
     canMoveFixedItems:false,
-    domSelector:'#three-container'
+    domSelector:'three-container'
   };
   constructor(){
     this._init();
