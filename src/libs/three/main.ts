@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { SkyBox } from './skybox';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
 interface ThreeOptions{
   resize?: boolean;
@@ -14,6 +16,8 @@ export class Main{
   private camera!: THREE.PerspectiveCamera;
   private renderer!:THREE.Renderer;
   private scene!:THREE.Scene;
+  private skyBox!: SkyBox;
+  private controls!: OrbitControls;
   
   private options: ThreeOptions = {
     resize:true,
@@ -45,6 +49,7 @@ export class Main{
     this.renderer.shadowMapSoft = true;
     this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
-
+    this.skyBox = new SkyBox(this.scene);
+    this.controls = new OrbitControls(this.camera, domElement);
   }
 }
