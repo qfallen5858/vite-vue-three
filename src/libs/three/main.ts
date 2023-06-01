@@ -14,7 +14,7 @@ interface ThreeOptions{
 
 export class Main{
   private camera!: THREE.PerspectiveCamera;
-  private renderer!:THREE.Renderer;
+  private renderer!:THREE.WebGLRenderer;
   private scene!:THREE.Scene;
   private skyBox!: SkyBox;
   private controls!: OrbitControls;
@@ -53,10 +53,11 @@ export class Main{
     });
   
     this.renderer.autoClear = false;
-    this.renderer.shadowMapEnabled = true;
-    this.renderer.shadowMapSoft = true;
-    this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
-
+    this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMapEnabled = true;
+    // this.renderer.shadowMapSoft = true;
+    // this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.skyBox = new SkyBox(this.scene);
     this.controls = new OrbitControls(this.camera, this.domElement);
 
@@ -64,7 +65,10 @@ export class Main{
 
     this.updateWindowSize();
     if(this.options.resize){
-      window.onresize = this.updateWindowSize as (ev:UIEvent) => any
+      // window.onresize = this.updateWindowSize as (ev:UIEvent) => any
+      window.onresize = (event:UIEvent) =>{
+        this.updateWindowSize();
+      }
     }
 
     
