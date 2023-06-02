@@ -63,6 +63,15 @@ export class Main{
 
     this.domElement.appendChild(this.renderer.domElement);
 
+    const geometry = new THREE.BoxGeometry()
+    const material = new THREE.MeshBasicMaterial({
+      color:0x00ff00,
+      wireframe:true
+    })
+
+    const cube = new THREE.Mesh(geometry, material)
+    this.scene.add(cube)
+
     this.updateWindowSize();
     if(this.options.resize){
       // window.onresize = this.updateWindowSize as (ev:UIEvent) => any
