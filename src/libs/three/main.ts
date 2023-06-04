@@ -54,9 +54,6 @@ export class Main{
   
     this.renderer.autoClear = false;
     this.renderer.shadowMap.enabled = true;
-    // this.renderer.shadowMapEnabled = true;
-    // this.renderer.shadowMapSoft = true;
-    // this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.skyBox = new SkyBox(this.scene);
     this.controls = new OrbitControls(this.camera, this.domElement);
@@ -66,11 +63,12 @@ export class Main{
     const geometry = new THREE.BoxGeometry()
     const material = new THREE.MeshBasicMaterial({
       color:0x00ff00,
-      wireframe:true
     })
 
     const cube = new THREE.Mesh(geometry, material)
     this.scene.add(cube)
+
+    this.camera.position.z = 15;
 
     this.updateWindowSize();
     if(this.options.resize){
@@ -80,6 +78,7 @@ export class Main{
       }
     }
 
+    this.animate();
     
   }
 
@@ -91,6 +90,7 @@ export class Main{
   private render() :void{
     if(this.shouldRender()){
       // this.renderer.clear();
+      
     }
     this.lastRender = Date.now();
   }
@@ -98,7 +98,10 @@ export class Main{
   private animate():void{
     const delay:number = 50;
     setTimeout(()=>{
-      requestAnimationFrame(this.animate)
+      requestAnimationFrame(()=>{
+        this.animate()
+      })
+      // requestAnimationFrame(this.animate)
     },delay);
     this.render()
   }

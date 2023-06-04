@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100%;width: 100%;">
     <el-container style="height:100%; width:100%;">
-      <el-aside width="20%">
+      <!-- <el-aside width="20%">
         <el-collapse accordion>
           <el-collapse-item title="指标库" name="1">
             <div>test</div>
@@ -13,7 +13,7 @@
             <div>test</div>
           </el-collapse-item>
         </el-collapse>
-      </el-aside>
+      </el-aside> -->
       <el-main>
         <View3d/>
         <!-- <div id="floorplanner" ref="floorplannerDiv">
