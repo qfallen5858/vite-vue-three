@@ -26,7 +26,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, reactive, ref, toRefs } from "vue";
+
 import {Main} from "./../libs/three/main"
 export default{
   data() { return {}},
