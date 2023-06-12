@@ -2,11 +2,12 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const home = () => import("../components/HelloWorld.vue");
 const editor = () => import("../views/editor/index.vue");
+const viewer3d = () => import("../components/Viewer3d.vue")
 const routes = [
   {
     path:"/",
     name:"index",
-    component:editor
+    component:viewer3d
 
   },
   {
@@ -17,7 +18,7 @@ const routes = [
       keepAlive: true,
       requireAuth: false,
     },
-    component: home,
+    component: editor,
   },
 ];
 
