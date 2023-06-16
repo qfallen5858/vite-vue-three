@@ -7,7 +7,7 @@ const routes = [
   {
     path:"/",
     name:"index",
-    component:viewer3d
+    component:editor
 
   },
   {

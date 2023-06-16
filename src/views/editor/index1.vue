@@ -1,26 +1,6 @@
 <template>
   <div style="height: 100%;width: 100%;">
-    <el-container style="height:100%; width:100%;">
-      <el-aside width="20%">
-        <el-collapse accordion>
-          <el-collapse-item title="指标库" name="1">
-            <div>test</div>
-          </el-collapse-item>
-          <el-collapse-item title="Design" name="2">
-            <div>test</div>
-          </el-collapse-item>
-          <el-collapse-item title="Add Items" name="3">
-            <div>test</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-aside>
-      <el-main>
-        <View3d/>
-        <!-- <div id="floorplanner" ref="floorplannerDiv">
-          <canvas id="floorplanner-canvas" ref="floorplannerCanvas"></canvas>
-        </div> -->
-      </el-main>
-    </el-container>
+    <View3d/>
   </div>
 </template>
 

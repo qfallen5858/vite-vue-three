@@ -1,12 +1,12 @@
 <template>
   <div id="three-container" ref="container" >
-    <!-- <div id="main-controls">
+    <div id="main-controls">
       <el-button>新建</el-button>
       <el-button>保存</el-button>
       <el-button>载入</el-button>
-    </div> -->
+    </div>
     
-    <!-- <div id="camera-controls">
+    <div id="camera-controls">
       <el-button ><el-icon><ZoomOut/></el-icon></el-button>
       <el-button ><el-icon><HomeFilled/></el-icon></el-button>
       <el-button ><el-icon><ZoomIn/></el-icon></el-button>
@@ -22,24 +22,30 @@
 
       <el-button ><el-icon><ArrowRight/></el-icon></el-button>
       
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, getCurrentInstance, onUnmounted } from "vue";
 import { TestScene } from "@/libs/three/testScene";
+import { Main } from "@/libs/three/main";
 let scene:TestScene|null = null;
+let threeMain:Main|null = null;
 
 onMounted(()=>{
-  const container = getCurrentInstance()?.refs['container'];
-  scene = new TestScene();
-  scene.init(container);
+  // const container = getCurrentInstance()?.refs['container'];
+  // scene = new TestScene();
+  // scene.init(container);
+  threeMain = new Main(getCurrentInstance()?.refs['container']);
 })
 
 onUnmounted(()=>{
-  if(scene){
-    scene.clear()
+  // if(scene){
+  //   scene.clear()
+  // }
+  if(threeMain){
+    threeMain.clear()
   }
 })
 </script>
@@ -48,8 +54,8 @@ onUnmounted(()=>{
 #three-container {
   width: 100%;
   height: 100%;
-  /* display: block; */
-  /* position: relative; */
+  display: block; 
+  position: relative;
   overflow: hidden;
 }
 #main-controls{
