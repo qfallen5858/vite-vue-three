@@ -4,19 +4,23 @@ import { Model } from "./model";
 import {Utils} from "../core/utils"
 export class SceneManager {
 
-  private scene: THREE.Scene|null = null;
+  private _scene: THREE.Scene|null = null;
 
-  private items: Item[] = [];
+  private _items: Item[] = [];
 
   private loader: THREE.ObjectLoader|null = null;
 
   private model: Model;
 
   constructor(model: Model) {
-    this.scene = new THREE.Scene();
+    this._scene = new THREE.Scene();
     this.loader = new THREE.ObjectLoader();
     this.model = model;
   }
+
+  
+
+  
 
   public add(mesh:THREE.Mesh){
     this.scene.add(mesh);
@@ -24,7 +28,7 @@ export class SceneManager {
 
   public remove(mesh:THREE.Mesh){
     this.scene.remove(mesh)
-    Utils.removeValue(this.items, mesh);
+    Utils.removeValue(this._items, mesh);
   }
 
   public get scene():THREE.Scene{
@@ -32,6 +36,6 @@ export class SceneManager {
   }
 
   public get items():Item[]{
-    return this.items;
+    return this._items;
   }
 }

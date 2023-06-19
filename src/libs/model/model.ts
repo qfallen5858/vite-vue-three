@@ -1,14 +1,18 @@
 import { Callbacker } from "../core/callback";
-
+import {SceneManager} from "./scene_manager"
 export class Model{
-  private sceneManager: SceneManager;
+  private _sceneManager: SceneManager;
 
-  private loadingCallback:Callbacker = new Callbacker();
+  private _loadingCallback:Callbacker = new Callbacker();
 
-  private loadedCallback:Callbacker = new Callbacker();
+  private _loadedCallback:Callbacker = new Callbacker();
 
   constructor(){
-    this.sceneManager = new SceneManager(this);
+    this._sceneManager = new SceneManager(this);
 
+  }
+
+  public get sceneManager():SceneManager{
+    return this._sceneManager;
   }
 }
