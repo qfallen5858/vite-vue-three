@@ -1,6 +1,7 @@
+import { Utils } from './utils';
 interface DataParam {}
 
-type CustomFunc = ()=>void
+type CustomFunc = (...argArray: any[]) =>void
 
 export class Callbacker {
   private callbacks: CustomFunc[] = [];
@@ -15,9 +16,9 @@ export class Callbacker {
 //     // }
 //   }
 
-  public fire(){
+  public fire( ...argArray: any[]){
     for(let callback of this.callbacks){
-      callback()
+      callback(...argArray)
     }
   }
   public add(callback: CustomFunc): void{
@@ -25,7 +26,7 @@ export class Callbacker {
   }
 
   public remove(callback: CustomFunc):void{ // 可以修改为返回Function
-    
+    Utils.removeValue(this.callbacks, callback);
   }
 
   // public fire(...argArray: any[]):void{

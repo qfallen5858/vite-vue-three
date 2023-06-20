@@ -1,41 +1,84 @@
 import * as THREE from "three";
 import { Item } from "../items/item";
 import { Model } from "./model";
-import {Utils} from "../core/utils"
+import { Utils } from "../core/utils";
+import { Callbacker } from "../core/callback";
+import { Metadata } from "../items/metadata";
 export class SceneManager {
-
-  private _scene: THREE.Scene|null = null;
+  private _scene: THREE.Scene;
 
   private _items: Item[] = [];
 
-  private loader: THREE.ObjectLoader|null = null;
+  private _loader: THREE.ObjectLoader;
 
-  private model: Model;
+  private _model: Model;
+
+  private _itemLoadingCallback: Callbacker = new Callbacker();
+
+  private _itemLoadedCallback: Callbacker = new Callbacker();
+
+  private _itemRemovedCallback: Callbacker = new Callbacker();
+
+  public needUpdate: boolean = false;
 
   constructor(model: Model) {
     this._scene = new THREE.Scene();
-    this.loader = new THREE.ObjectLoader();
-    this.model = model;
+    this._loader = new THREE.ObjectLoader();
+    this._loader.setCrossOrigin("");
+    this._model = model;
   }
 
-  
-
-  
-
-  public add(mesh:THREE.Mesh){
+  public add(mesh: THREE.Mesh) {
     this.scene.add(mesh);
   }
 
-  public remove(mesh:THREE.Mesh){
-    this.scene.remove(mesh)
+  public remove(mesh: THREE.Mesh) {
+    this.scene.remove(mesh);
     Utils.removeValue(this._items, mesh);
   }
 
-  public get scene():THREE.Scene{
+  public get scene(): THREE.Scene {
     return this.scene;
   }
 
-  public get items():Item[]{
+  public get items(): Item[] {
     return this._items;
+  }
+
+  public get itemCount(): number {
+    return this._items.length;
+  }
+
+  public removeItem(item: Item, removeInItems: boolean = true): void {
+    this._itemRemovedCallback.fire(item);
+    item.removed();
+    this._scene.remove(item);
+    if (removeInItems) {
+      Utils.removeValue(this._items, item);
+    }
+  }
+
+  public clearItems(): void {
+    this.items.forEach((item) => {
+      this.removeItem(item, true);
+    });
+    this._items = [];
+  }
+
+  public addItem(
+    itemType: number,
+    fileName: string,
+    metadata: Metadata,
+    position: THREE.Vector3,
+    rotation: number,
+    scale: THREE.Vector3,
+    fixed: boolean
+  ): void {
+    itemType = itemType || 1;
+    let onloadCallback = (object:THREE.Object3D)=>{
+
+    }
+    this._itemLoadingCallback.fire();
+    this._loader.load(fileName, onloadCallback);
   }
 }
