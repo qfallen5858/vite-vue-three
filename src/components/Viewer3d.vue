@@ -27,26 +27,30 @@
 </template>
 
 <script lang="ts" setup>
+import { Application } from "@/libs/floorplanner/application";
 import { onMounted, getCurrentInstance, onUnmounted } from "vue";
-import { TestScene } from "@/libs/three/testScene";
-import { Main } from "@/libs/three/main";
-let scene:TestScene|null = null;
-let threeMain:Main|null = null;
-
+// import { TestScene } from "@/libs/three/testScene";
+// import { Main } from "@/libs/three/main";
+// let scene:TestScene|null = null;
+// let threeMain:Main|null = null;
+let threeApp:Application|null = null;
 onMounted(()=>{
   // const container = getCurrentInstance()?.refs['container'];
   // scene = new TestScene();
   // scene.init(container);
-  threeMain = new Main(getCurrentInstance()?.refs['container']);
+  threeApp = new Application({
+    threeElement:'three-container'
+  })
+  // threeMain = new Main(getCurrentInstance()?.refs['container']);
 })
 
 onUnmounted(()=>{
   // if(scene){
   //   scene.clear()
   // }
-  if(threeMain){
-    threeMain.clear()
-  }
+  // if(threeMain){
+  //   threeMain.clear()
+  // }
 })
 </script>
 

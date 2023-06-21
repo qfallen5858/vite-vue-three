@@ -1,7 +1,7 @@
 import { Utils } from './utils';
 interface DataParam {}
 
-type CustomFunc = (...argArray: any[]) =>void
+export type CustomFunc = (...argArray: any[]) =>void
 
 export class Callbacker {
   private callbacks: CustomFunc[] = [];

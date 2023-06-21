@@ -9,7 +9,7 @@ export class FloorItem extends Item {
     model: Model,
     metadata: Metadata,
     geometry: THREE.BufferGeometry,
-    material: THREE.MeshBasicMaterial,
+    material: THREE.Material,
     position: THREE.Vector3,
     rotation: number,
     scale: THREE.Vector3

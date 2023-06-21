@@ -42,7 +42,7 @@ export abstract class Item extends THREE.Mesh {
     model: Model,
     metadata: Metadata,
     geometry: THREE.BufferGeometry,
-    material: THREE.MeshBasicMaterial,
+    material: THREE.Material,
     position: THREE.Vector3,
     rotation: number,
     scale: THREE.Vector3

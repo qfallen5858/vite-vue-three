@@ -4,6 +4,7 @@ import { Model } from "./model";
 import { Utils } from "../core/utils";
 import { Callbacker } from "../core/callback";
 import { Metadata } from "../items/metadata";
+import {Factory} from "../items/factory"
 export class SceneManager {
   private _scene: THREE.Scene;
 
@@ -76,8 +77,17 @@ export class SceneManager {
   ): void {
     itemType = itemType || 1;
     let onloadCallback = (object:THREE.Object3D)=>{
-
+      const mesh:THREE.Mesh = object.children[0] as THREE.Mesh;
+      const geomerty = mesh.geometry;
+      const material = mesh.material as THREE.Material;
+      let item:Item = Factory.getItemInstance(itemType, this._model,metadata, geomerty, material, position, rotation, scale);
+      item.fixed = fixed || false;
+      this._items.push(item);
+      this.add(item);
+      item.initObject();
+      this._itemLoadedCallback.fire(item);
     }
+    
     this._itemLoadingCallback.fire();
     this._loader.load(fileName, onloadCallback);
   }

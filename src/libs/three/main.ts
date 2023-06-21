@@ -13,21 +13,21 @@ interface ThreeOptions {
 }
 
 export class Main {
-  private camera: THREE.PerspectiveCamera | null = null;
-  private renderer: THREE.WebGLRenderer | null = null;
-  private scene: THREE.Scene | null = null;
-  private skyBox!: SkyBox;
-  private controls!: OrbitControls;
+  private _camera: THREE.PerspectiveCamera | null = null;
+  private _renderer: THREE.WebGLRenderer | null = null;
+  private _scene: THREE.Scene | null = null;
+  private _skyBox!: SkyBox;
+  private _controls!: OrbitControls;
 
-  private itemSelectedCallbacker: Callbacker = new Callbacker();
-  private itemUnselectedCallbacker: Callbacker = new Callbacker();
+  private _itemSelectedCallbacker: Callbacker = new Callbacker();
+  private _itemUnselectedCallbacker: Callbacker = new Callbacker();
 
-  private domElement: HTMLElement | null = null;
-  private lastRender!: number;
+  private _domElement: HTMLElement | null = null;
+  private _lastRender!: number;
 
-  private needUpdate: Boolean = false;
+  private _needUpdate: Boolean = false;
 
-  private options: ThreeOptions = {
+  private _options: ThreeOptions = {
     resize: true,
     pushHref: false,
     spin: true,
@@ -35,47 +35,47 @@ export class Main {
     canMoveFixedItems: false,
     domSelector: "three-container",
   };
-  constructor(el: any) {
+  constructor(el: string) {
     this._init(el);
   }
 
-  private _init(el: any) {
+  private _init(el: string) {
     // Three.ImageUtils.crossOrigin = ''
 
     if (el == null) {
-      this.domElement = document.getElementById(
-        this.options.domSelector
+      this._domElement = document.getElementById(
+        this._options.domSelector
       ) as HTMLElement;
     } else {
-      this.domElement = el;
+      this._domElement = document.getElementById(el) as HTMLElement;
     }
-    if (this.domElement == null) {
+    if (this._domElement == null) {
       throw new Error("domElement is null or undefined");
     }
-    this.scene = new THREE.Scene();
-    this.renderer = new THREE.WebGLRenderer({
+    this._scene = new THREE.Scene();
+    this._renderer = new THREE.WebGLRenderer({
       antialias: true,
     });
-    this.renderer.setClearColor("white");
-    this.renderer.setSize(
-      this.domElement.offsetWidth,
-      this.domElement.offsetHeight
+    this._renderer.setClearColor("white");
+    this._renderer.setSize(
+      this._domElement.offsetWidth,
+      this._domElement.offsetHeight
     );
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
-    this.domElement.appendChild(this.renderer.domElement);
+    this._camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
+    this._domElement.appendChild(this._renderer.domElement);
     // this.camera = new THREE.PerspectiveCamera(
     //   75,
     //   this.domElement.offsetWidth / this.domElement.offsetHeight,
     //   0.1,
     //   1000
     // );
-    this.camera.position.z = 15;
+    this._camera.position.z = 15;
 
-    this.renderer.autoClear = false;
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.skyBox = new SkyBox(this.scene);
-    this.controls = new OrbitControls(this.camera, this.domElement);
+    this._renderer.autoClear = false;
+    this._renderer.shadowMap.enabled = true;
+    this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this._skyBox = new SkyBox(this._scene);
+    this._controls = new OrbitControls(this._camera, this._domElement);
 
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({
@@ -83,12 +83,11 @@ export class Main {
     });
 
     const cube = new THREE.Mesh(geometry, material);
-    this.scene.add(cube);
+    this._scene.add(cube);
 
     this.updateWindowSize();
-    if (this.options.resize) {
-      // window.onresize = this.updateWindowSize as (ev:UIEvent) => any
-      window.onresize = (event: UIEvent) => {
+    if (this._options.resize) {
+      window.onresize = () => {
         this.updateWindowSize();
       };
     }
@@ -97,7 +96,7 @@ export class Main {
   }
 
   private shouldRender(): boolean {
-    if (this.needUpdate) return true;
+    if (this._needUpdate) return true;
     return false;
   }
 
@@ -106,11 +105,11 @@ export class Main {
       // this.renderer.clear();
       // this.renderer.clear();
     }
-    if (this.scene && this.camera && this.renderer) {
-      this.renderer.render(this.scene, this.camera);
+    if (this._scene && this._camera && this._renderer) {
+      this._renderer.render(this._scene, this._camera);
     }
 
-    this.lastRender = Date.now();
+    this._lastRender = Date.now();
   }
 
   private animate(): void {
@@ -123,21 +122,21 @@ export class Main {
     this.render();
   }
   private updateWindowSize(): void {
-    if (this.domElement && this.camera && this.renderer) {
-      const heightMargin: number = this.domElement.offsetTop;
-      const widthMargin: number = this.domElement.offsetLeft;
-      const elementWidth: number = this.domElement.clientWidth;
+    if (this._domElement && this._camera && this._renderer) {
+      const heightMargin: number = this._domElement.offsetTop;
+      const widthMargin: number = this._domElement.offsetLeft;
+      const elementWidth: number = this._domElement.clientWidth;
       let elementHeight: number;
-      if (this.options.resize) {
+      if (this._options.resize) {
         elementHeight = window.innerHeight - heightMargin;
       } else {
-        elementHeight = this.domElement.clientHeight;
+        elementHeight = this._domElement.clientHeight;
       }
-      this.camera.aspect = elementWidth / elementHeight;
-      this.camera.updateProjectionMatrix();
+      this._camera.aspect = elementWidth / elementHeight;
+      this._camera.updateProjectionMatrix();
 
-      this.renderer.setSize(elementWidth, elementHeight);
-      this.needUpdate = true;
+      this._renderer.setSize(elementWidth, elementHeight);
+      this._needUpdate = true;
     }
   }
 
