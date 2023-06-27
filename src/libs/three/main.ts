@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { SkyBox } from "./skybox";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Callbacker } from "../core/callback";
+import { Model } from "../model/model";
 interface ThreeOptions {
   resize?: boolean;
   pushHref?: boolean;
@@ -15,7 +16,7 @@ interface ThreeOptions {
 export class Main {
   private _camera: THREE.PerspectiveCamera | null = null;
   private _renderer: THREE.WebGLRenderer | null = null;
-  private _scene: THREE.Scene | null = null;
+  private _scene: THREE.Scene ;
   private _skyBox!: SkyBox;
   private _controls!: OrbitControls;
 
@@ -26,6 +27,7 @@ export class Main {
   private _lastRender!: number;
 
   private _needUpdate: Boolean = false;
+  private _model:Model;
 
   private _options: ThreeOptions = {
     resize: true,
@@ -35,7 +37,16 @@ export class Main {
     canMoveFixedItems: false,
     domSelector: "three-container",
   };
-  constructor(el: string) {
+  // constructor(el: string) {
+  //   this._init(el);
+  // }
+
+  constructor(model:Model, el:string, opts?:ThreeOptions){
+    this._model = model;
+    this._scene = this._model.sceneManager.scene;
+    if(opts){
+      this._options = opts;
+    }
     this._init(el);
   }
 
@@ -52,7 +63,7 @@ export class Main {
     if (this._domElement == null) {
       throw new Error("domElement is null or undefined");
     }
-    this._scene = new THREE.Scene();
+    // this._scene = new THREE.Scene();
     this._renderer = new THREE.WebGLRenderer({
       antialias: true,
     });

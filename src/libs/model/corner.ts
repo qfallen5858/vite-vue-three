@@ -128,8 +128,17 @@ export class Corner{
     return null;
   }
 
+  /**
+   * 通过角落找墙
+   * @param corner 
+   * @returns 
+   */
   public findWallFromOtherCorner(corner:Corner):Wall|null{
     return this.findWallFromStartCorner(corner) || this.findWallFromEndCorner(corner);
+  }
+
+  private combineWithCorner(corner:Corner):void{
+    
   }
 
 

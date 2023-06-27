@@ -36,4 +36,9 @@ export class Model{
     console.log(planJson.floorplan.walls.length);
     this._loadedCallback.fire();
   }
+
+  private newRoom():void{
+    this._sceneManager.clearItems();
+    
+  }
 }

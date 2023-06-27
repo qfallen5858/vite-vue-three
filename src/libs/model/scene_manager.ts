@@ -39,7 +39,7 @@ export class SceneManager {
   }
 
   public get scene(): THREE.Scene {
-    return this.scene;
+    return this._scene;
   }
 
   public get items(): Item[] {

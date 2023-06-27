@@ -73,4 +73,14 @@ export class Wall{
     return Utils.pointDistanceFromLine(point.x, point.y, this._start.x, this._start.y, this._end.x, this._end.y)
   }
 
+  public getOppositeCorner(corner:Corner):Corner|null{
+    if(this._start === corner){
+      return this._end;
+    }else if(this._end === corner){
+      return this._start;
+    }else{
+      return null;
+    }
+  }
+
 }
