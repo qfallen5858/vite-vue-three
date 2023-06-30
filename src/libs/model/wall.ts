@@ -1,6 +1,8 @@
 import { Callbacker, CustomFunc } from '../core/callback';
+import { CONFIG_WALL_HEIGHT, CONFIG_WALL_THICKNESS, Configuration } from '../core/configuration';
 import { Utils } from '../core/utils';
 import { Corner } from './corner';
+import { HalfEdge } from './half_edge';
 import * as INNER_JSON from './json'
 const defaultWallTexture:INNER_JSON.Texture = {
   url:"rooms/textures/wallmap.png",
@@ -12,13 +14,30 @@ export class Wall{
 
   private _start:Corner;
 
+  private _end:Corner;
+
+  private _frontEdge:HalfEdge|null = null;
+
+  private _backEdge:HalfEdge | null = null;
+
   private _moveCallback:Callbacker = new Callbacker();
 
   private _deletedCallback:Callbacker = new Callbacker();
 
   private _actionCallback:Callbacker = new Callbacker();
 
-  private _end:Corner;
+  public frontTexture:INNER_JSON.Texture = defaultWallTexture;
+
+  public backTexture:INNER_JSON.Texture = defaultWallTexture;
+
+  public get thinkness():number{
+    return Configuration.getNumericValue(CONFIG_WALL_THICKNESS);
+  }
+
+  public get height():number{
+    return Configuration.getNumericValue(CONFIG_WALL_HEIGHT);
+  }
+  
   constructor(start:Corner, end:Corner){
     this._start = start;
     this._end = end;
@@ -31,6 +50,14 @@ export class Wall{
 
   public get end():Corner{
     return this._end;
+  }
+
+  public set frontEdge(edge:HalfEdge){
+    this._frontEdge = edge;
+  }
+
+  public set backEdge(edge:HalfEdge){
+    this._backEdge = edge;
   }
   
   public remove():void{
