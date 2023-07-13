@@ -20,5 +20,12 @@ export default defineConfig({
         replacement:resolve(__dirname, "src/views")
       }
     ]
+  },
+  css:{
+    preprocessorOptions:{
+      scss:{
+        additionalData:'@import "./src/assets/scss/globalVar.scss";@import "./src/assets/scss/globalMixin.scss";'
+      }
+    }
   }
 })
