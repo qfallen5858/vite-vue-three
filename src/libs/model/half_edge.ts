@@ -86,7 +86,7 @@ export class HalfEdge {
   private halfAngleVector(
     v1: HalfEdge,
     v2: HalfEdge
-  ): { x: number; y: number } {
+  ): { x: number, y: number } {
     let v1Line: Line, v2Line: Line;
     if (!v1) {
       v1Line = {
@@ -146,6 +146,7 @@ export class HalfEdge {
     let sn:number = Math.sin(theta/2.0)
     
 
-
+    //todo fix
+    return {x:0, y:0};
   }
 }

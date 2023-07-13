@@ -18,14 +18,18 @@ export default defineConfig({
       {
         find:'views',
         replacement:resolve(__dirname, "src/views")
+      },
+      {
+        find:'style',
+        replacement:resolve(__dirname,"src/styles")
       }
     ]
   },
-  css:{
-    preprocessorOptions:{
-      scss:{
-        additionalData:'@import "./src/assets/scss/globalVar.scss";@import "./src/assets/scss/globalMixin.scss";'
-      }
-    }
-  }
+  // css:{
+  //   preprocessorOptions:{
+  //     scss:{
+  //       additionalData:'@import "./src/assets/scss/globalVar.scss";@import "./src/assets/scss/globalMixin.scss";'
+  //     }
+  //   }
+  // }
 })
