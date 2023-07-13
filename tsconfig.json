@@ -17,7 +17,8 @@
     "paths": {
       "@/*":["src/*"],
       "comps/*":["src/components/*"],
-      "views/*":["src/views/*"]
+      "views/*":["src/views/*"],
+      "style/*":["src/styles/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
