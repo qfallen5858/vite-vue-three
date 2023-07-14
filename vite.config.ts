@@ -12,16 +12,20 @@ export default defineConfig({
         replacement:resolve(__dirname, "src")
       },
       {
-        find:'comps',
+        find:'component',
         replacement:resolve(__dirname, "src/components")
       },
       {
-        find:'views',
+        find:'view',
         replacement:resolve(__dirname, "src/views")
       },
       {
         find:'style',
         replacement:resolve(__dirname,"src/styles")
+      },
+      {
+        find:'asset',
+        replacement:resolve(__dirname,"src/assets")
       }
     ]
   },

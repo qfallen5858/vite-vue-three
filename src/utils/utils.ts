@@ -1,4 +1,5 @@
-// import Vue from 'vue'
+// @ts-nocheck
+
 /**
  * 深拷贝方法
  */

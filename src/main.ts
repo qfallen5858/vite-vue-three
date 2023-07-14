@@ -1,10 +1,14 @@
 import { createApp } from "vue";
 import ElementPlus from "element-plus";
 import * as ElementPlusIconVue from '@element-plus/icons-vue'
+import "asset/iconfont/iconfont.css"
 import "element-plus/dist/index.css";
-import "./styles/style.css";
-import "./assets/scss/globalVar.scss"
-import "./assets/scss/globalMixin.scss"
+import "style/style.css";
+import "style/scss/animate.scss";
+import "style/scss/globalVar.scss"
+import "style/scss/globalMixin.scss"
+import "style/reset.css"
+import "style/scss/global.scss"
 import App from "./App.vue";
 import router from "./router/index";
 

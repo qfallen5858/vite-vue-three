@@ -42,7 +42,7 @@ onMounted(init);
 </script> -->
 
 <script lang="ts">
-import View3d from "comps/Viewer3d.vue"
+import View3d from "component/Viewer3d.vue"
 import {Floorplanner} from '../../libs/floorplanner/floorplanner';
 import {Designer} from '../../libs/design2d/designer'
 export default{

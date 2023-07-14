@@ -1,8 +1,14 @@
 <script >
-import Toolbar from 'comps/Toolbar.vue'
+import Toolbar from 'component/Toolbar.vue'
+import ComponentList from 'component/ComponentList.vue'
+import RealTimeComponentList from 'component/RealTimeComponentList.vue'
+import Editor from 'component/Editor/index.vue'
 export default {
   components: {
-    Toolbar
+    Toolbar,
+    ComponentList,
+    RealTimeComponentList,
+    Editor
   }
 }
 </script>
@@ -11,8 +17,15 @@ export default {
     <Toolbar />
 
     <main>
-      <section class="left"></section>
-      <section class="center"></section>
+      <section class="left">
+        <ComponentList/>
+        <RealTimeComponentList/>
+      </section>
+      <section class="center">
+        <div class="content">
+          <Editor/>
+        </div>
+      </section>
       <section class="right"></section>
     </main>
   </div>

@@ -16,9 +16,10 @@
     "baseUrl": "./",
     "paths": {
       "@/*":["src/*"],
-      "comps/*":["src/components/*"],
-      "views/*":["src/views/*"],
-      "style/*":["src/styles/*"]
+      "component/*":["src/components/*"],
+      "view/*":["src/views/*"],
+      "style/*":["src/styles/*"],
+      "asset/*":["src/assets/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
