@@ -1,5 +1,5 @@
 <template>
-  <div class="component-list">
+  <div class="component-list" @dragstart="handleDragStart">
     <div v-for="(item, index) in componentList" :key="index" class="list" draggable="true" :data-index="index">
       <span v-if="item.icon.startsWith('el')" :class="item.icon"></span>
       <span v-else class="iconfont" :class="'icon-' + item.icon"></span>
@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
 import { defineComponent } from 'vue'
 import componentList from 'component/custom-component/component-list'
@@ -19,7 +19,9 @@ export default defineComponent({
     }
   },
   methods: {
-
+    handleDragStart(e:DragEvent){
+      e.target instanceof HTMLElement && e.dataTransfer.setData('index', e.target.dataset.index);
+    }
   }
 })
 </script>

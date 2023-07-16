@@ -1,17 +1,8 @@
-<script >
-import Toolbar from 'component/Toolbar.vue'
-import ComponentList from 'component/ComponentList.vue'
-import RealTimeComponentList from 'component/RealTimeComponentList.vue'
-import Editor from 'component/Editor/index.vue'
-export default {
-  components: {
-    Toolbar,
-    ComponentList,
-    RealTimeComponentList,
-    Editor
-  }
-}
-</script>
+<!-- <script setup lang="ts">
+import {useEventBus} from "@/utils/bus"
+
+
+</script> -->
 <template>
   <div class="home">
     <Toolbar />
@@ -22,7 +13,7 @@ export default {
         <RealTimeComponentList/>
       </section>
       <section class="center">
-        <div class="content">
+        <div class="content" @drop="handleDrop" @dragover="handleDropOver" @mousedown="handleMouseDown" @mouseup="handleMouseUp">
           <Editor/>
         </div>
       </section>
@@ -30,6 +21,60 @@ export default {
     </main>
   </div>
 </template>
+<script lang="ts">
+import {defineComponent} from 'vue'
+import Toolbar from 'component/Toolbar.vue'
+import ComponentList from 'component/ComponentList.vue'
+import RealTimeComponentList from 'component/RealTimeComponentList.vue'
+import Editor from 'component/Editor/index.vue'
+import bus from "@/utils/bus"
+import {mapActions, mapState} from 'pinia'
+import {indexStore, contextMenuStore} from '@/store/index'
+export default defineComponent({
+ 
+  components: {
+    Toolbar,
+    ComponentList,
+    RealTimeComponentList,
+    Editor
+  },
+  mounted(){
+    bus.on('test', (str)=>{
+      console.log(str + 'ok')
+    })
+  },
+  computed:{
+    ...mapState(indexStore, ['isClickComponent'])
+  },
+  methods:{
+    ...mapActions(contextMenuStore, ['hideContextMenu']),
+    ...mapActions(indexStore, ['setCurComponent']),
+    handleDrop(e){
+      console.log("drop")
+      console.log(e)
+    },
+    handleDropOver(e){
+      console.log("dropOver")
+      console.log(e)
+    },
+    handleMouseDown(e:MouseEvent){
+      console.log("down")
+      console.log(e)
+      e.stopPropagation();
+
+    },
+    handleMouseUp(e:MouseEvent){
+      if(!this.isClickComponent){
+        
+      }
+      if(e.button != 2){
+        this.hideContextMenu();
+      }
+    }
+
+  }
+}) 
+</script>
 <style lang="scss">
 .home {
   height: 100vh;

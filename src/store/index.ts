@@ -1,26 +1,35 @@
 import { defineStore } from "pinia";
+import { $ } from "@/utils/utils";
 
 export const indexStore = defineStore("main", {
   state: () => {
     return {
       canvasStyleData: {
         // 页面全局数据
-        width: 1200,
-        height: 740,
-        scale: 100,
-        color: "#000",
-        opacity: 1,
-        background: "#fff",
-        fontSize: 14,
+        width: 1200 as number,
+        height: 740 as number,
+        scale: 100 as number,
+        color: "#000" as string,
+        opacity: 1 as number,
+        background: "#fff" as string,
+        fontSize: 14 as number,
       },
       componentData: [],
       curComponent: null,
-      curComponentIndex: null,
+      curComponentIndex: null as number,
+      // 点击画布时是否点中组件，主要用于取消选中组件用。
+      // 如果没点中组件，并且在画布空白处弹起鼠标，则取消当前组件的选中状态
+      isClickComponent: false,
       areaData: {},
     };
   },
   getters: {},
-  actions: {},
+  actions: {
+    setCurComponent(component:any, index:number ){
+      this.curComponent = component;
+      this.curComponentIndex = index;
+    }
+  },
 });
 
 export const composeStore = defineStore("compose", {
@@ -29,14 +38,39 @@ export const composeStore = defineStore("compose", {
       areaData: {
         // 选中区域包含的组件以及区域位移信息
         style: {
-          top: 0,
-          left: 0,
-          width: 0,
-          height: 0,
+          top: 0 as number,
+          left: 0 as number,
+          width: 0 as number,
+          height: 0 as number,
         },
         components: [],
       },
-      editor: null,
+      editor: null as Element | null,
     };
+  },
+  actions: {
+    getEditor() {
+      this.editor = $("#editor");
+    },
+  },
+});
+
+export const contextMenuStore = defineStore("contextMenu", {
+  state: () => {
+    return {
+      menuTop: 0 as number,
+      menuLeft: 0 as number,
+      menuShow: false as boolean,
+    };
+  },
+  actions: {
+    showContextMenu(left: number, top: number) {
+      this.menuLeft = left;
+      this.menuTop = top;
+      this.menuShow = true;
+    },
+    hideContextMenu() {
+      this.menuShow = false;
+    },
   },
 });

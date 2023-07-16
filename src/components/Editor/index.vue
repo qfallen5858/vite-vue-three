@@ -1,29 +1,37 @@
 <template>
-  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle">
-    <Grid/>
+  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle" @contextmenu="handleContextMenu"
+    @mousedown="handleMouseDown">
+    <Grid />
+
+    <ContextMenu />
   </div>
 </template>
-<script>
-
+<script lang="ts">
 import { getStyle, getComponentRotatedStyle, getShapeStyle, getSVGStyle, getCanvasStyle } from '@/utils/style'
 import { $, isPreventDrop } from '@/utils/utils'
 import { changeStyleWithScale } from '@/utils/translate'
 import Grid from './Grid.vue'
-import { mapState } from 'pinia'
-import { indexStore, composeStore } from '@/store/index';
-export default {
+import ContextMenu from './ContextMenu.vue'
+import { mapState, mapActions } from 'pinia'
+import { indexStore, composeStore, contextMenuStore } from '@/store/index';
+import { defineComponent } from 'vue'
+import bus from "@/utils/bus"
+
+export default defineComponent({
   computed: {
     ...mapState(indexStore, ['componentData', 'curComponent', 'canvasStyleData']),
     ...mapState(composeStore, ['editor']),
     editorStyle() {
-      return { 
-        ...getCanvasStyle(this.canvasStyleData), 
-        width: changeStyleWithScale(this.canvasStyleData.width) + 'px', 
-        height: changeStyleWithScale(this.canvasStyleData.height) + 'px' }
+      return {
+        ...getCanvasStyle(this.canvasStyleData),
+        width: changeStyleWithScale(this.canvasStyleData.width) + 'px',
+        height: changeStyleWithScale(this.canvasStyleData.height) + 'px'
+      }
     }
   },
   components: {
-    Grid
+    Grid,
+    ContextMenu
   },
   props: {
     isEdit: {
@@ -44,8 +52,36 @@ export default {
       isShowArea: false,
       svgFilterAttrs: ['width', 'height', 'top', 'left', 'rotate'],
     }
+  },
+  mounted(){
+    this.getEditor();
+    bus.emit("test", "test")
+  },
+  methods: {
+    ...mapActions(contextMenuStore, ["showContextMenu"]),
+    ...mapActions(composeStore, ['getEditor']),
+    handleContextMenu(e: MouseEvent) {
+      e.stopPropagation();
+      e.preventDefault();
+      let target = e.target as HTMLElement | null;
+      let top = e.offsetY;
+      let left = e.offsetX;
+      while (target && target instanceof SVGElement) {
+        target = target.parentElement
+      }
+      while (target && !target.className?.includes('editor')) {
+        left += target.offsetLeft;
+        top += target.offsetTop;
+        target = target.parentElement;
+      }
+      this.showContextMenu(left, top);
+    },
+
+    handleMouseDown(e: MouseEvent) {
+      // this.hideContextMenu();
+    }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .editor {
