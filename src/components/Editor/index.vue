@@ -59,7 +59,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(contextMenuStore, ["showContextMenu"]),
-    ...mapActions(composeStore, ['getEditor']),
+    ...mapActions(composeStore, ['getEditor', 'setAreaData']),
     handleContextMenu(e: MouseEvent) {
       e.stopPropagation();
       e.preventDefault();
@@ -79,6 +79,23 @@ export default defineComponent({
 
     handleMouseDown(e: MouseEvent) {
       // this.hideContextMenu();
+      if(!this.curComponent || (isPreventDrop(this.curComponent.component))){
+        e.preventDefault()
+      }
+
+
+    },
+    hideArea(){
+      this.isShowArea = false;
+      this.width = 0;
+      this.height = 0;
+
+      this.setAreaData({
+        style:{
+          left:0, top:0, width:0, height:0
+        },
+        components:[]
+      })
     }
   }
 })

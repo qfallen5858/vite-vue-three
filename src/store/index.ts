@@ -52,6 +52,9 @@ export const composeStore = defineStore("compose", {
     getEditor() {
       this.editor = $("#editor");
     },
+    setAreaData(data:{style:{top:number, left:number, width:number, height:number }, components:any[]}){
+      this.areaData = data;
+    }
   },
 });
 
