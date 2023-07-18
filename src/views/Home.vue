@@ -1,8 +1,3 @@
-<!-- <script setup lang="ts">
-import {useEventBus} from "@/utils/bus"
-
-
-</script> -->
 <template>
   <div class="home">
     <Toolbar />
@@ -33,7 +28,12 @@ import RealTimeComponentList from 'component/RealTimeComponentList.vue'
 import Editor from 'component/Editor/index.vue'
 import bus from "@/utils/bus"
 import { mapActions, mapState } from 'pinia'
-import { indexStore, contextMenuStore } from '@/store/index'
+import { indexStore, composeStore, contextMenuStore, snapshotStore } from '@/store/index'
+import componentList from 'component/custom-component/component-list'
+// import {LogMethod} from '@/utils/decorator'
+import { deepCopy } from '../utils/utils';
+import { generateUUID } from 'three/src/math/MathUtils'
+import { changeComponentSizeWithScale } from '../utils/translate';
 export default defineComponent({
   components: {
     Toolbar,
@@ -48,28 +48,48 @@ export default defineComponent({
     }
   },
   mounted() {
-    bus.on('test', (str) => {
-      console.log(str + 'ok')
-    })
+    // bus.on('test', (str) => {
+    //   console.log(str + 'ok')
+    // })
   },
   computed: {
-    ...mapState(indexStore, ['isClickComponent'])
+    ...mapState(indexStore, ['isClickComponent']),
+    ...mapState(composeStore, ['editor'])
   },
+
   methods: {
     ...mapActions(contextMenuStore, ['hideContextMenu']),
-    ...mapActions(indexStore, ['setCurComponent']),
-    handleDrop(e) {
-      console.log("drop")
-      console.log(e)
+    ...mapActions(indexStore, ['setCurComponent', 'addComponent']),
+    ...mapActions(snapshotStore,['recordSnapshot']),
+
+    handleDrop(e:DragEvent) {
+      console.log("handedrop")
+      e.preventDefault()
+      e.stopPropagation()
+      if(this.editor == null){
+        return;
+      }
+      
+      const index = e.dataTransfer.getData("index")
+      const rectInfo = this.editor.getBoundingClientRect();
+      if(index){
+        const component = deepCopy(componentList[index])
+        component.style.top = e.clientY - rectInfo.y
+        component.style.left = e.clientX - rectInfo.x
+        component.id = generateUUID()
+        changeComponentSizeWithScale(component);
+        this.addComponent(component)
+        this.recordSnapshot();
+      }
     },
-    handleDropOver(e) {
-      console.log("dropOver")
-      console.log(e)
+    handleDropOver(e:DragEvent) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy"
     },
     handleMouseDown(e: MouseEvent) {
-      console.log("down")
-      console.log(e)
-      e.stopPropagation();
+      // console.log("down")
+      // console.log(e)
+      // e.stopPropagation();
 
     },
     handleMouseUp(e: MouseEvent) {

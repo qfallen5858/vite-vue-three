@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { $ } from "@/utils/utils";
+import { $, deepCopy } from "@/utils/utils";
 
 export const indexStore = defineStore("main", {
   state: () => {
@@ -28,6 +28,13 @@ export const indexStore = defineStore("main", {
     setCurComponent(component:any, index:number ){
       this.curComponent = component;
       this.curComponentIndex = index;
+    },
+    addComponent(component:any, index:number){
+      if(index !== undefined){
+        this.componentData.splice(index, 0, component)
+      }else{
+        this.componentData.push(component)
+      }
     }
   },
 });
@@ -77,3 +84,20 @@ export const contextMenuStore = defineStore("contextMenu", {
     },
   },
 });
+
+export const snapshotStore = defineStore("snapshot", {
+  state: () =>{
+    return {
+      snapshotData:[],
+      snapshotIndex:-1
+    }
+  },
+  actions:{
+    recordSnapshot(){
+      this.snapshotData[++this.snapshotIndex] = deepCopy(indexStore().componentData)
+      if(this.snapshotIndex < this.snapshotData.length - 1){
+        this.snapshotData = this.snapshotData.slice(0,this.snapshotIndex + 1)
+      }
+    }
+  }
+})

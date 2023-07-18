@@ -1,8 +1,10 @@
 <template>
-  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle" @contextmenu="handleContextMenu"
+  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle" 
+    @contextmenu="handleContextMenu"
     @mousedown="handleMouseDown">
     <Grid />
 
+    
     <ContextMenu />
   </div>
 </template>
@@ -15,7 +17,7 @@ import ContextMenu from './ContextMenu.vue'
 import { mapState, mapActions } from 'pinia'
 import { indexStore, composeStore, contextMenuStore } from '@/store/index';
 import { defineComponent } from 'vue'
-import bus from "@/utils/bus"
+// import bus from "@/utils/bus"
 
 export default defineComponent({
   computed: {
@@ -55,7 +57,7 @@ export default defineComponent({
   },
   mounted(){
     this.getEditor();
-    bus.emit("test", "test")
+    // bus.emit("test", "test")
   },
   methods: {
     ...mapActions(contextMenuStore, ["showContextMenu"]),

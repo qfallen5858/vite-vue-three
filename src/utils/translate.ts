@@ -131,6 +131,20 @@ export const changeStyleWithScale = (value:number) =>{
   return multiply(value, divide(indexStore().canvasStyleData.scale, 100))
 }
 
+const needToChangeAttr = ['width', 'height', 'fontSize'];
+export const changeComponentSizeWithScale = (component)=>{
+  Object.keys(component.style).forEach(key=>{
+    if(needToChangeAttr.includes(key)){
+      if(key === 'fontSize' && component.style[key] === '')return;
+      component.style[key] = changeStyleWithScale(component.style[key])
+    }
+  })
+}
+
+export function mod360(deg:number) :number{
+  return (deg + 360) % 360
+}
+
 export const toPercent = (val:number):string => {
   return val * 100 + '%'
 }
