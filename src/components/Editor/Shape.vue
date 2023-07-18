@@ -1,15 +1,13 @@
 <template>
-  <div class="shape">
+  <div class="shape" :class="{active}" @click="selectCurComponent">
     <slot></slot>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
-import { indexStore, composeStore } from '@/store/index'
-import { string } from 'mathjs';
+import { indexStore, composeStore, contextMenuStore } from '@/store/index'
 import { mod360 } from '@/utils/translate';
-import { imageEmits } from 'element-plus';
 const pointListForShape: string[] = ['lt', 't', 'rt', 'r', 'rb', 'b', 'lb', 'l'];
 const pointListForLine: string[] = ['l', 'r']
 const initialAngle = {
@@ -72,6 +70,15 @@ export default defineComponent({
     // this.getCursor();
   },
   methods: {
+    ...mapActions(contextMenuStore, ['hideContextMenu']),
+    selectCurComponent(e:MouseEvent){
+      e.stopPropagation();
+      e.preventDefault();
+      this.hideContextMenu();
+    },
+    isActive():boolean{
+      return this.active && !this.element?.isLock;
+    },
     getPointList(): string[] {
       if (this.element?.component === 'line-shape') {
         return pointListForLine
