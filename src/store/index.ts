@@ -14,6 +14,7 @@ export const indexStore = defineStore("main", {
         background: "#fff" as string,
         fontSize: 14 as number,
       },
+      isInEditor:false,
       componentData: [],
       curComponent: null,
       curComponentIndex: null as number,
@@ -35,6 +36,12 @@ export const indexStore = defineStore("main", {
       }else{
         this.componentData.push(component)
       }
+    },
+    setClickComponentStatus(value:boolean){
+      this.isClickComponent = value;
+    },
+    setInEditorStatus(value:boolean){
+      this.isInEditor = value;
     }
   },
 });

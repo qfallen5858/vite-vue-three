@@ -11,6 +11,7 @@
     "isolatedModules": false,
     "esModuleInterop": true,
     "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations":"5.0",
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "types": ["element-plus/global"],

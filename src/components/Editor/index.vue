@@ -1,10 +1,16 @@
 <template>
-  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle" 
-    @contextmenu="handleContextMenu"
+  <div id="editor" class="editor" :class="{ edit: isEdit }" :style="editorStyle" @contextmenu="handleContextMenu"
     @mousedown="handleMouseDown">
     <Grid />
 
-    
+    <Shape v-for="(item, index) in componentData" :key="item.id" :index="index
+      " :default-style="item.style" :style="getShapeStyle(item.style)"
+        :active="item.id === (curComponent||{}).id"
+        :element="item" :class="{isLock:item.isLock}"
+      >
+
+    </Shape>
+
     <ContextMenu />
   </div>
 </template>
@@ -14,10 +20,10 @@ import { $, isPreventDrop } from '@/utils/utils'
 import { changeStyleWithScale } from '@/utils/translate'
 import Grid from './Grid.vue'
 import ContextMenu from './ContextMenu.vue'
+import Shape from './Shape.vue'
 import { mapState, mapActions } from 'pinia'
 import { indexStore, composeStore, contextMenuStore } from '@/store/index';
 import { defineComponent } from 'vue'
-// import bus from "@/utils/bus"
 
 export default defineComponent({
   computed: {
@@ -33,7 +39,8 @@ export default defineComponent({
   },
   components: {
     Grid,
-    ContextMenu
+    ContextMenu,
+    Shape
   },
   props: {
     isEdit: {
@@ -55,13 +62,14 @@ export default defineComponent({
       svgFilterAttrs: ['width', 'height', 'top', 'left', 'rotate'],
     }
   },
-  mounted(){
+  mounted() {
     this.getEditor();
     // bus.emit("test", "test")
   },
   methods: {
     ...mapActions(contextMenuStore, ["showContextMenu"]),
     ...mapActions(composeStore, ['getEditor', 'setAreaData']),
+    getShapeStyle,
     handleContextMenu(e: MouseEvent) {
       e.stopPropagation();
       e.preventDefault();
@@ -81,22 +89,22 @@ export default defineComponent({
 
     handleMouseDown(e: MouseEvent) {
       // this.hideContextMenu();
-      if(!this.curComponent || (isPreventDrop(this.curComponent.component))){
+      if (!this.curComponent || (isPreventDrop(this.curComponent.component))) {
         e.preventDefault()
       }
 
 
     },
-    hideArea(){
+    hideArea() {
       this.isShowArea = false;
       this.width = 0;
       this.height = 0;
 
       this.setAreaData({
-        style:{
-          left:0, top:0, width:0, height:0
+        style: {
+          left: 0, top: 0, width: 0, height: 0
         },
-        components:[]
+        components: []
       })
     }
   }

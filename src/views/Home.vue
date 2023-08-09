@@ -52,15 +52,22 @@ export default defineComponent({
     //   console.log(str + 'ok')
     // })
   },
+  created() {
+      this.restore();
+  },
   computed: {
-    ...mapState(indexStore, ['isClickComponent']),
+    ...mapState(indexStore, ['isClickComponent', 'curComponent', 'canvasStyleData']),
     ...mapState(composeStore, ['editor'])
   },
 
   methods: {
     ...mapActions(contextMenuStore, ['hideContextMenu']),
-    ...mapActions(indexStore, ['setCurComponent', 'addComponent']),
+    ...mapActions(indexStore, ['setCurComponent', 'addComponent', 'setClickComponentStatus', 'setInEditorStatus']),
     ...mapActions(snapshotStore,['recordSnapshot']),
+
+    restore(){
+
+    },
 
     handleDrop(e:DragEvent) {
       console.log("handedrop")
@@ -87,14 +94,15 @@ export default defineComponent({
       e.dataTransfer.dropEffect = "copy"
     },
     handleMouseDown(e: MouseEvent) {
-      // console.log("down")
-      // console.log(e)
-      // e.stopPropagation();
+      e.stopPropagation();
+      this.setInEditorStatus(false);
+      this.setClickComponentStatus(false);
+      
 
     },
     handleMouseUp(e: MouseEvent) {
       if (!this.isClickComponent) {
-
+        this.setCurComponent(null, null);
       }
       if (e.button != 2) {
         this.hideContextMenu();
