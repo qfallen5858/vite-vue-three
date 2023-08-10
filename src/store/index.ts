@@ -4,6 +4,7 @@ import { $, deepCopy } from "@/utils/utils";
 export const indexStore = defineStore("main", {
   state: () => {
     return {
+      editMode:'edit', //edit or preview
       canvasStyleData: {
         // 页面全局数据
         width: 1200 as number,

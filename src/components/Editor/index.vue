@@ -4,10 +4,11 @@
     <Grid />
 
     <Shape v-for="(item, index) in componentData" :key="item.id" :index="index
-      " :default-style="item.style" :style="getShapeStyle(item.style)"
-        :active="item.id === (curComponent||{}).id"
-        :element="item" :class="{isLock:item.isLock}"
-      >
+      " :default-style="item.style" :style="getShapeStyle(item.style)" :active="item.id === (curComponent || {}).id"
+      :element="item" :class="{ isLock: item.isLock }">
+      <component :is="item.component" v-if="item.component == 'VText'" :id="'component ' + item.id" class="component"
+        :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request">
+      </component>
 
     </Shape>
 
@@ -106,6 +107,11 @@ export default defineComponent({
         },
         components: []
       })
+    },
+    getComponentStyle(style: any) {
+      const componentStyle = getStyle(style, this.svgFilterAttrs)
+      console.log(componentStyle)
+      return componentStyle
     }
   }
 })

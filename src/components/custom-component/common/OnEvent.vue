@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import bus from "@/utils/bus.ts"
+import bus from "@/utils/bus"
 export default defineComponent({
   props:{
     linkage:{

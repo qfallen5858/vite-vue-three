@@ -1,5 +1,10 @@
 <template>
-  <div class="shape" :class="{active}" @click="selectCurComponent">
+  <div class="shape" :class="{ active }" @click="selectCurComponent" @mousedown="handleMouseDownOnShape">
+    <span v-show="isActive" class="iconfront icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
+    <span v-show="element.isLock" class="iconfront icon-suo"></span>
+    <div v-for="(item, index) in (isActive ? getPointList() : [])" :key="index" class="shape-point"
+      :style="getPointStyle(item)" @mousedown="handleMouseDownOnPoint(item, $event)">
+    </div>
     <slot></slot>
   </div>
 </template>
@@ -64,19 +69,64 @@ export default defineComponent({
     ...mapState(composeStore, ['editor'])
   },
   mounted() {
-    if(this.curComponent){
+    if (this.curComponent) {
       this.cursors = this.getCursor();
     }
     // this.getCursor();
   },
   methods: {
     ...mapActions(contextMenuStore, ['hideContextMenu']),
-    selectCurComponent(e:MouseEvent){
+    selectCurComponent(e: MouseEvent) {
       e.stopPropagation();
       e.preventDefault();
       this.hideContextMenu();
     },
-    isActive():boolean{
+    handleRotate(e: MouseEvent) {
+
+    },
+
+    handleMouseDownOnShape(e: MouseEvent) {
+
+    },
+    handleMouseDownOnPoint(item, e: MouseEvent) {
+
+    },
+    getPointStyle(point: string) {
+      const width = this.defaultStyle.width;
+      const height = this.defaultStyle.height;
+      // const { width, height } = this.defautStyle;
+      const hasTop: boolean = /t/.test(point)
+      const hasBottom: boolean = /b/.test(point)
+      const hasLeft: boolean = /l/.test(point)
+      const hasRight: boolean = /r/.test(point)
+      let left: number = 0, top: number = 0;
+      if (point.length === 2) {
+        left = hasLeft ? 0 : width;
+        top = hasTop ? 0 : height;
+      } else {
+        if (hasTop || hasBottom) {
+          left = width / 2
+          top = hasTop ? 0 : height
+        }
+
+        if (hasLeft || hasRight) {
+          top = height / 2
+          left = hasLeft ? 0 : width
+        }
+      }
+
+      const style = {
+        marginLeft: '-4px',
+        marginTop: '-4px',
+        cursor: this.cursors[point],
+        left: `${left}px`,
+        top: `${top}px`
+      }
+      return style
+    },
+
+
+    isActive(): boolean {
       return this.active && !this.element?.isLock;
     },
     getPointList(): string[] {
@@ -119,4 +169,17 @@ export default defineComponent({
 })
 
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.shape {
+  position: absolute;
+
+  &:hover {
+    cursor: move;
+  }
+}
+
+.active{
+  outline: 1px solid #70c0ff;
+  user-select: none;
+}
+</style>
