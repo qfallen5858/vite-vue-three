@@ -1,5 +1,6 @@
 import {indexStore} from '@/store/index'
 import {divide, multiply} from 'mathjs'
+import { deepCopy } from './utils';
 interface Point {
   x: number;
   y: number;
@@ -133,6 +134,10 @@ export const changeStyleWithScale = (value:number) =>{
 
 const needToChangeAttr = ['width', 'height', 'fontSize'];
 export const changeComponentSizeWithScale = (component)=>{
+  // const iStore = indexStore();
+  // const componentData = deepCopy(iStore.componentData);
+
+
   Object.keys(component.style).forEach(key=>{
     if(needToChangeAttr.includes(key)){
       if(key === 'fontSize' && component.style[key] === '')return;

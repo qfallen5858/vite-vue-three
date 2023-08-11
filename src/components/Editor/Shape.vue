@@ -1,7 +1,7 @@
 <template>
   <div class="shape" :class="{ active }" @click="selectCurComponent" @mousedown="handleMouseDownOnShape">
-    <span v-show="isActive" class="iconfront icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
-    <span v-show="element.isLock" class="iconfront icon-suo"></span>
+    <span v-show="isActive" class="iconfont icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
+    <span v-show="element.isLock" class="iconfont icon-suo"></span>
     <div v-for="(item, index) in (isActive ? getPointList() : [])" :key="index" class="shape-point"
       :style="getPointStyle(item)" @mousedown="handleMouseDownOnPoint(item, $event)">
     </div>
@@ -11,8 +11,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
-import { indexStore, composeStore, contextMenuStore } from '@/store/index'
+import { indexStore, composeStore, contextMenuStore, snapshotStore } from '@/store/index'
 import { mod360 } from '@/utils/translate';
+import {isPreventDrop} from "@/utils/utils"
+import bus from "@/utils/bus"
 const pointListForShape: string[] = ['lt', 't', 'rt', 'r', 'rb', 'b', 'lb', 'l'];
 const pointListForLine: string[] = ['l', 'r']
 const initialAngle = {
@@ -76,16 +78,65 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(contextMenuStore, ['hideContextMenu']),
+    ...mapActions(indexStore, ['setClickComponentStatus', 'setCurComponent', 'setShapeStyle', 'setInEditorStatus']),
+    ...mapActions(snapshotStore, ['recordSnapshot']),
     selectCurComponent(e: MouseEvent) {
       e.stopPropagation();
       e.preventDefault();
       this.hideContextMenu();
     },
     handleRotate(e: MouseEvent) {
+      this.setClickComponentStatus(true);
+      e.preventDefault();
+      e.stopPropagation();
+      const pos = { ...this.defaultStyle }
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startRotate = pos.rotate;
+
+      const rect = this.$el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+
+      const rotateDegreeBefore: number = Math.atan2(startY - centerY, startX - centerX) / (Math.PI / 180)
+
+      let hasMove: boolean = false;
+      const self = this;
+      const move = (moveEvent: MouseEvent) => {
+        hasMove = true;
+        const curX = moveEvent.clientX;
+        const curY = moveEvent.clientY;
+        const rotateDegreeAfter = Math.atan2(curY - centerY, curX - centerX) / (Math.PI / 180)
+        pos.rotate = startRotate + rotateDegreeAfter - rotateDegreeBefore
+        self.setShapeStyle(pos)
+      }
+
+      const up = (moveEvent: MouseEvent) => {
+        hasMove && self.recordSnapshot()
+        document.removeEventListener('mousemove', move)
+        document.removeEventListener('mouseup', up)
+        self.cursors = self.getCursor()
+      }
+
+      document.addEventListener('mousemove', move)
+      document.addEventListener('mouseup', up)
 
     },
 
     handleMouseDownOnShape(e: MouseEvent) {
+      this.$nextTick(()=>{bus.emit('componentClick')})
+      this.setInEditorStatus(true)
+      this.setClickComponentStatus(true)
+
+      if(isPreventDrop(this.element.component)){
+        e.preventDefault()
+      }
+      e.stopPropagation()
+
+      this.setCurComponent(this.element, this.index)
+      if(this.element.isLock){
+        return;
+      }
 
     },
     handleMouseDownOnPoint(item, e: MouseEvent) {
@@ -178,8 +229,39 @@ export default defineComponent({
   }
 }
 
-.active{
+.active {
   outline: 1px solid #70c0ff;
   user-select: none;
+}
+
+.shape-point {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #59c7f9;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.icon-xiangyouxuanzhuan {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: grab;
+  color: #59c759;
+  font-size: 20px;
+  font-weight: 600;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.icon-suo {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

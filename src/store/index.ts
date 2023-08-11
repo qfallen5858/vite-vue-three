@@ -43,6 +43,16 @@ export const indexStore = defineStore("main", {
     },
     setInEditorStatus(value:boolean){
       this.isInEditor = value;
+    },
+    setShapeStyle(pos){
+      if(!this.curComponent){
+        return;
+      }
+      if(pos.top)this.curComponent.style.top = Math.round(pos.top)
+      if(pos.left)this.curComponent.style.left = Math.round(pos.left)
+      if(pos.width)this.curComponent.style.width = Math.round(pos.width)
+      if(pos.height)this.curComponent.style.height = Math.round(pos.height)
+      if(pos.rotate)this.curComponent.style.rotate = Math.round(pos.rotate)
     }
   },
 });

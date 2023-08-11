@@ -51,6 +51,7 @@ export default defineComponent({
   },
   
   created() {
+    // console.log('created')
     bus.on('componentClick', this.onComponentClick)
   },
   beforeUnmount() {

@@ -9,7 +9,7 @@
       <component :is="item.component" v-if="item.component == 'VText'" :id="'component ' + item.id" class="component"
         :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request">
       </component>
-
+      <!-- <component is="VTest"></component> -->
     </Shape>
 
     <ContextMenu />
@@ -110,7 +110,7 @@ export default defineComponent({
     },
     getComponentStyle(style: any) {
       const componentStyle = getStyle(style, this.svgFilterAttrs)
-      console.log(componentStyle)
+      // console.log(componentStyle)
       return componentStyle
     }
   }

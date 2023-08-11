@@ -24,7 +24,7 @@ export function deepCopy(target:any):any{
  * @param i 
  * @param j 
  */
-export function swap(arr, i, j){
+export function swap(arr:any[], i:number, j:number){
   const temp = arr[i]
   arr.value.splice(i, 1, arr.value[j])
   arr.value.splice(j, 1, temp)
@@ -35,6 +35,6 @@ export function $(selector:string){
 }
 
 const components = ['VText', 'RectShape', 'CircleShape']
-export function isPreventDrop(component){
+export function isPreventDrop(component:string){
   return !components.includes(component) && !component.startsWith('SVG')
 }

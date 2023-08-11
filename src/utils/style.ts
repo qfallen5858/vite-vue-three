@@ -10,6 +10,7 @@ export const getShapeStyle = (style)=>{
       result.transform = `rotate(${style[attr]}deg)`
     }
   })
+  return result;
 }
 
 const needUnit = [
