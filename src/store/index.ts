@@ -1,5 +1,6 @@
-import { defineStore } from "pinia";
-import { $, deepCopy } from "@/utils/utils";
+import { defineStore, storeToRefs} from "pinia";
+import { $, deepCopy, swap } from "@/utils/utils";
+import toast from "@/utils/toast";
 
 export const indexStore = defineStore("main", {
   state: () => {
@@ -36,6 +37,18 @@ export const indexStore = defineStore("main", {
         this.componentData.splice(index, 0, component)
       }else{
         this.componentData.push(component)
+      }
+    },
+    deleteComponent(index:number|undefined){
+      if(index === undefined){
+        index = this.curComponentIndex;
+      }
+      if(index == this.curComponentIndex){
+        this.curComponent = null
+        this.curComponentIndex = null
+      }
+      if(index != null){
+        this.componentData.splice(index,1)
       }
     },
     setClickComponentStatus(value:boolean){
@@ -117,5 +130,63 @@ export const snapshotStore = defineStore("snapshot", {
         this.snapshotData = this.snapshotData.slice(0,this.snapshotIndex + 1)
       }
     }
+  }
+})
+
+export const layerStore = defineStore("layer", {
+  state:()=> {
+      return {
+
+      }
+  },
+  actions:{
+    upComponent(){
+      const _indexStore = indexStore()
+      const {componentData, curComponentIndex} = _indexStore;
+      if(curComponentIndex < componentData.length - 1){
+        swap(componentData, curComponentIndex, curComponentIndex + 1)
+        _indexStore.curComponentIndex = curComponentIndex + 1
+        _indexStore.componentData = componentData
+      }else{
+        toast("already top")
+      }
+    },
+    downComponent(){
+      const _indexStore = indexStore()
+      const {componentData, curComponentIndex} = _indexStore;
+      if(curComponentIndex >0){
+        swap(componentData, curComponentIndex, curComponentIndex - 1)
+        _indexStore.curComponentIndex = curComponentIndex - 1
+        _indexStore.componentData = componentData
+      }else{
+        toast("already bottom")
+      }
+    },
+    topComponent(){
+      const _indexStore = indexStore()
+      const {componentData, curComponentIndex, curComponent} = _indexStore;
+      if(curComponentIndex < componentData.length - 1){
+        componentData.splice(curComponentIndex, 1)
+        componentData.push(curComponent)
+        _indexStore.curComponentIndex = componentData.length - 1
+        _indexStore.componentData = componentData
+      }else{
+        toast("already top")
+      }
+    },
+    bottomComponent(){
+      const _indexStore = indexStore()
+      const {componentData, curComponentIndex, curComponent} = _indexStore;
+      if(curComponentIndex > 0){
+        componentData.splice(curComponentIndex, 1)
+        componentData.unshift(curComponent)
+        _indexStore.curComponentIndex = 0
+        _indexStore.componentData = componentData
+      }else{
+        toast("already bottom")
+      }
+    }
+
+
   }
 })

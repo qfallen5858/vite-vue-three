@@ -1,7 +1,8 @@
 import { App, defineAsyncComponent } from 'vue'
 const components:string[] = [
   'VText',
-  'VTest'
+  'VTest',
+  'VButton'
 ]
 
 export const registerComponent = (app:App) =>{

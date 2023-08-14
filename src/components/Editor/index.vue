@@ -6,8 +6,13 @@
     <Shape v-for="(item, index) in componentData" :key="item.id" :index="index
       " :default-style="item.style" :style="getShapeStyle(item.style)" :active="item.id === (curComponent || {}).id"
       :element="item" :class="{ isLock: item.isLock }">
-      <component :is="item.component" v-if="item.component == 'VText'" :id="'component ' + item.id" class="component"
+      <component :is="item.component" v-if="item.component.startsWith('SVG')" :id="'component ' + item.id" class="component"
+      :style="getSVGStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request"></component>
+      <component :is="item.component" v-else-if="item.component == 'VText'" :id="'component ' + item.id" class="component"
         :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request">
+      </component>
+      <component :is="item.component" v-else="item.component == 'VText'" :id="'component ' + item.id" class="component"
+        :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request" >
       </component>
       <!-- <component is="VTest"></component> -->
     </Shape>
@@ -70,7 +75,7 @@ export default defineComponent({
   methods: {
     ...mapActions(contextMenuStore, ["showContextMenu"]),
     ...mapActions(composeStore, ['getEditor', 'setAreaData']),
-    getShapeStyle,
+    getShapeStyle,getSVGStyle,
     handleContextMenu(e: MouseEvent) {
       e.stopPropagation();
       e.preventDefault();

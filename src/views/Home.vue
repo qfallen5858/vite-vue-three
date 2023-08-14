@@ -70,7 +70,7 @@ export default defineComponent({
     },
 
     handleDrop(e:DragEvent) {
-      console.log("handedrop")
+      // console.log("handedrop")
       e.preventDefault()
       e.stopPropagation()
       if(this.editor == null){

@@ -1,8 +1,8 @@
 <template>
   <div class="shape" :class="{ active }" @click="selectCurComponent" @mousedown="handleMouseDownOnShape">
-    <span v-show="isActive" class="iconfont icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
+    <span v-show="isActive()" class="iconfont icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
     <span v-show="element.isLock" class="iconfont icon-suo"></span>
-    <div v-for="(item, index) in (isActive ? getPointList() : [])" :key="index" class="shape-point"
+    <div v-for="(item, index) in (isActive() ? getPointList() : [])" :key="index" class="shape-point"
       :style="getPointStyle(item)" @mousedown="handleMouseDownOnPoint(item, $event)">
     </div>
     <slot></slot>

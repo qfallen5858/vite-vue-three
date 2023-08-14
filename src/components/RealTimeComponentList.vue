@@ -1,24 +1,71 @@
 <template>
   <div class="real-time-component-list">
-    <div v-for="(item, index) in componentData" :key="index" class="list">
-
+    <div v-for="(item, index) in componentData" :key="index" class="list" 
+      :class="{active: transformIndex(index) === curComponentIndex}" @click="onClick(transformIndex(index))"
+    >
+      <span class="iconfont" :class="'icon-' + getComponent(index).icon"></span>
+      <span>{{ getComponent(index).label }}</span>
+      <div class="icon-container">
+        <span class="iconfont icon-shangyi" @click="onUpComponent()"></span>
+        <span class="iconfont icon-xiayi" @click="onDownComponent()"></span>
+        <span class="iconfont icon-shanchu" @click="onDeleteComponent()"></span>
+      </div>
     </div>
 
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-import { mapState } from 'pinia'
-import { indexStore } from '@/store/index';
+import { mapState, mapActions } from 'pinia'
+import { indexStore, layerStore, snapshotStore } from '@/store/index';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   computed: {
     ...mapState(indexStore,['componentData',
       'curComponent',
       'curComponentIndex'])
+  },
+  methods:{
+    ...mapActions(indexStore, ['setCurComponent', 'deleteComponent']),
+    ...mapActions(snapshotStore, ['recordSnapshot']),
+    ...mapActions(layerStore, ['upComponent', 'downComponent']),
+    getComponent(index:number){
+      return this.componentData[this.componentData.length - 1 - index]
+    },
+
+    transformIndex(index:number):number{
+      return this.componentData.length - 1 - index
+    },
+
+    onClick(index:number){
+      this.setCurComponentByIndex(index)
+    },
+    setCurComponentByIndex(index:number){
+      this.setCurComponent(this.componentData[index], index)
+    },
+    onDeleteComponent(){
+      setTimeout(() => {
+        this.deleteComponent()
+        this.recordSnapshot() 
+      });
+    },
+    onUpComponent(){
+      setTimeout(() => {
+        this.upComponent()
+        this.recordSnapshot() 
+      });
+    },
+    onDownComponent(){
+      setTimeout(() => {
+        this.downComponent()
+        this.recordSnapshot() 
+      });
+    }
+
   }
-}
+}) 
 
 
 </script>
