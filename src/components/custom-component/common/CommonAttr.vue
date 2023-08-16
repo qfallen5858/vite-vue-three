@@ -9,7 +9,7 @@
               <el-option v-for="item in optionMap[key]" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
-            <el-input v-else v-mode.number="curComponent.style[key]" type="number"></el-input>
+            <el-input v-else v-model.number="curComponent.style[key]" type="number"></el-input>
           </el-form-item>
         </el-form>
       </el-collapse-item>

@@ -8,11 +8,20 @@
       :element="item" :class="{ isLock: item.isLock }">
       <component :is="item.component" v-if="item.component.startsWith('SVG')" :id="'component ' + item.id" class="component"
       :style="getSVGStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request"></component>
-      <component :is="item.component" v-else-if="item.component == 'VText'" :id="'component ' + item.id" class="component"
+      <component :is="item.component" v-else-if="item.component != 'VText'" :id="'component ' + item.id" class="component"
         :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request">
       </component>
-      <component :is="item.component" v-else="item.component == 'VText'" :id="'component ' + item.id" class="component"
-        :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request" >
+      <component 
+        :is="item.component" 
+        v-else 
+        :id="'component ' + item.id" 
+        class="component"
+        :style="getComponentStyle(item.style)" 
+        :propValue="item.propValue" 
+        :element="item" 
+        :request="item.request"
+        @input="handleInput"
+        >
       </component>
       <!-- <component is="VTest"></component> -->
     </Shape>
@@ -94,11 +103,51 @@ export default defineComponent({
     },
 
     handleMouseDown(e: MouseEvent) {
-      // this.hideContextMenu();
       if (!this.curComponent || (isPreventDrop(this.curComponent.component))) {
         e.preventDefault()
       }
 
+      this.hideArea()
+
+      const rectInfo = this.editor.getBoundingClientRect();
+      this.editorX = rectInfo.x
+      this.editorY  = rectInfo.y
+      
+      const startX = e.clientX
+      const startY = e.clientY
+
+      this.start.x = startX - this.editorX
+      this.start.y = startY - this.editorY
+
+      this.isShowArea = true
+
+      const move = (moveEvent:MouseEvent) =>{
+        this.width = Math.abs(moveEvent.clientX - startX)
+        this.height = Math.abs(moveEvent.clientY - startY)
+        if(moveEvent.clientX < startX){
+          this.start.x = moveEvent.clientX - this.editX
+        }
+        if(moveEvent.clientY < startY){
+          this.start.y = moveEvent.clientY - this.editY
+        }
+      }
+      const up = (moveEvent:MouseEvent) =>{
+        document.removeEventListener('mousemove', move)
+        document.removeEventListener('mouseup', up)
+
+        if(moveEvent.clientX == startX && moveEvent.clientY == startY){
+          this.hideArea()
+          return
+        }
+
+        // this.createGroup();
+      }
+
+      document.addEventListener('mousemove', move)
+      document.addEventListener('mouseup', up)
+
+    },
+    handleInput(){
 
     },
     hideArea() {

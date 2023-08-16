@@ -26,7 +26,11 @@ export const indexStore = defineStore("main", {
       areaData: {},
     };
   },
-  getters: {},
+  getters: {
+    request(state){
+      return state.curComponent.request;
+    }
+  },
   actions: {
     setCurComponent(component:any, index:number ){
       this.curComponent = component;

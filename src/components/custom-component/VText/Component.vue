@@ -90,7 +90,7 @@ export default defineComponent({
       this.canEdit && e.stopPropagation()
     },
     handleInput(e:Event){
-      // this.$emit('input', this.element, e.target?.innerHTML)
+      this.$emit('input', this.element, (e.target as Element).innerHTML)
     },
     setEdit() {
       if (this.element.isLock) {

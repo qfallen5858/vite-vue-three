@@ -16,7 +16,16 @@
           <Editor />
         </div>
       </section>
-      <section class="right"></section>
+      <section class="right">
+        <el-tabs v-if="curComponent" v-model="activeName">
+          <el-tab-pane label="属性" name="attr">
+            <component :is="curComponent.component + 'Attr'"></component>
+          </el-tab-pane>
+          <el-tab-pane label="动画" name="animation" style="padding-top: 20px;"></el-tab-pane>
+          <el-tab-pane label="事件" name="events" style="padding-top: 20px;"></el-tab-pane>
+        </el-tabs>
+        <CanvasAttr v-else/>
+      </section>
     </main>
   </div>
 </template>
@@ -34,12 +43,14 @@ import componentList from 'component/custom-component/component-list'
 import { deepCopy } from '../utils/utils';
 import { generateUUID } from 'three/src/math/MathUtils'
 import { changeComponentSizeWithScale } from '../utils/translate';
+import CanvasAttr from "component/CanvasAttr.vue"
 export default defineComponent({
   components: {
     Toolbar,
     ComponentList,
     RealTimeComponentList,
-    Editor
+    Editor,
+    CanvasAttr
   },
   data() {
     return {

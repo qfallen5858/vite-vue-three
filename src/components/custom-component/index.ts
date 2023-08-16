@@ -2,7 +2,8 @@ import { App, defineAsyncComponent } from 'vue'
 const components:string[] = [
   'VText',
   'VTest',
-  'VButton'
+  'VButton',
+  'RectShape'
 ]
 
 export const registerComponent = (app:App) =>{
@@ -17,7 +18,7 @@ export const registerComponent = (app:App) =>{
     // app.component(key, import.meta.glob("./"+key + "/Component.vue"))
     // const {default:attr} = await import(`./${key}/Attr.vue`);
 
-    app.component(key + 'attr',defineAsyncComponent(()=>import(`./${key}/Attr.vue`)) );
+    app.component(key + 'Attr',defineAsyncComponent(()=>import(`./${key}/Attr.vue`)) );
 
   })
   
