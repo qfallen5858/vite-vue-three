@@ -6,10 +6,25 @@
     <Shape v-for="(item, index) in componentData" :key="item.id" :index="index
       " :default-style="item.style" :style="getShapeStyle(item.style)" :active="item.id === (curComponent || {}).id"
       :element="item" :class="{ isLock: item.isLock }">
-      <component :is="item.component" v-if="item.component.startsWith('SVG')" :id="'component ' + item.id" class="component"
-      :style="getSVGStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request"></component>
-      <component :is="item.component" v-else-if="item.component != 'VText'" :id="'component ' + item.id" class="component"
-        :style="getComponentStyle(item.style)" :propValue="item.propValue" :element="item" :request="item.request">
+      <component 
+        :is="item.component" 
+        v-if="item.component.startsWith('SVG')" 
+        :id="'component ' + item.id" 
+        class="component"
+        :style="getSVGStyle(item.style)" 
+        :propValue="item.propValue" 
+        :element="item" 
+        :request="item.request">
+      </component>
+      <component 
+        :is="item.component" 
+        v-else-if="item.component != 'VText'" 
+        :id="'component ' + item.id" 
+        class="component"
+        :style="getComponentStyle(item.style)" 
+        :propValue="item.propValue" 
+        :element="item" 
+        :request="item.request">
       </component>
       <component 
         :is="item.component" 
@@ -20,13 +35,14 @@
         :propValue="item.propValue" 
         :element="item" 
         :request="item.request"
-        @input="handleInput"
-        >
+        @input="handleInput">
       </component>
       <!-- <component is="VTest"></component> -->
     </Shape>
 
     <ContextMenu />
+
+    <Area v-show="isShowArea" :start="start" :width="width" :height="height"/>
   </div>
 </template>
 <script lang="ts">
@@ -35,6 +51,7 @@ import { $, isPreventDrop } from '@/utils/utils'
 import { changeStyleWithScale } from '@/utils/translate'
 import Grid from './Grid.vue'
 import ContextMenu from './ContextMenu.vue'
+import Area from "./Area.vue"
 import Shape from './Shape.vue'
 import { mapState, mapActions } from 'pinia'
 import { indexStore, composeStore, contextMenuStore } from '@/store/index';
@@ -55,7 +72,8 @@ export default defineComponent({
   components: {
     Grid,
     ContextMenu,
-    Shape
+    Shape,
+    Area
   },
   props: {
     isEdit: {
