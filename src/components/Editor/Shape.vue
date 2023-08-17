@@ -138,7 +138,40 @@ export default defineComponent({
         return;
       }
 
+      this.cursors = this.getCursor()
+
+      const pos = {...this.defaultStyle};
+      const startX = e.clientX
+      const startY = e.clientY
+
+      const startTop = Number(pos.top)
+      const startLeft = Number(pos.left)
+
+      let hasMove = false;
+
+      const move = (moveEvent:MouseEvent) => {
+        hasMove = true;
+        const curX = moveEvent.clientX;
+        const curY = moveEvent.clientY;
+        pos.top = curY - startTop + startTop
+        pos.left = curX - startLeft + startLeft
+
+        this.setShapeStyle(pos)
+        this.$nextTick(() => {
+          bus.emit('move', {isDownward:curY - startY > 0, isRightward:curX - startX > 0})
+        })
+      }
+
+      const up = (moveEvent:MouseEvent) => {
+        hasMove && this.recordSnapshot()
+        bus.emit('unmove')
+        document.removeEventListener('mousemove', move)
+        document.removeEventListener('mouseup', up)
+      }
+      document.addEventListener('mousemove', move)
+      document.addEventListener('mouseup', up)
     },
+
     handleMouseDownOnPoint(item, e: MouseEvent) {
 
     },
