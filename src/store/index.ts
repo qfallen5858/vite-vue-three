@@ -70,6 +70,10 @@ export const indexStore = defineStore("main", {
       if(pos.width)this.curComponent.style.width = Math.round(pos.width)
       if(pos.height)this.curComponent.style.height = Math.round(pos.height)
       if(pos.rotate)this.curComponent.style.rotate = Math.round(pos.rotate)
+    },
+    setShapeSingleStyle({key,value}){
+      if(!this.curComponent)return
+      this.curComponent.style[key] = value
     }
   },
 });

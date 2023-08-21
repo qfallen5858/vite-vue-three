@@ -153,8 +153,8 @@ export default defineComponent({
         hasMove = true;
         const curX = moveEvent.clientX;
         const curY = moveEvent.clientY;
-        pos.top = curY - startTop + startTop
-        pos.left = curX - startLeft + startLeft
+        pos.top = curY - startY + startTop
+        pos.left = curX - startX + startLeft
 
         this.setShapeStyle(pos)
         this.$nextTick(() => {

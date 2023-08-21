@@ -42,6 +42,7 @@
 
     <ContextMenu />
 
+    <MarkLine/>
     <Area v-show="isShowArea" :start="start" :width="width" :height="height"/>
   </div>
 </template>
@@ -53,6 +54,7 @@ import Grid from './Grid.vue'
 import ContextMenu from './ContextMenu.vue'
 import Area from "./Area.vue"
 import Shape from './Shape.vue'
+import MarkLine from './MarkLine.vue'
 import { mapState, mapActions } from 'pinia'
 import { indexStore, composeStore, contextMenuStore } from '@/store/index';
 import { defineComponent } from 'vue'
@@ -73,7 +75,8 @@ export default defineComponent({
     Grid,
     ContextMenu,
     Shape,
-    Area
+    Area,
+    MarkLine
   },
   props: {
     isEdit: {
