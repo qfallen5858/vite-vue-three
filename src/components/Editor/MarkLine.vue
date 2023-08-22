@@ -1,6 +1,6 @@
 <template>
   <div class="mark-line">
-    <div v-for="(line, index) in lines" v-show="lineStatus['line'] || false" :key="index" class="line" ref="line"
+    <div v-for="(line, index) in lines" v-show="lineStatus[line] || false" :key="index" class="line" :ref="line"
       :class="line.includes('x') ? 'xline' : 'yline'"></div>
   </div>
 </template>
@@ -28,17 +28,19 @@ export default defineComponent({
       lines: ['xt', 'xc', 'xb', 'yl', 'yc', 'yr'] as string[],
       tolerance: 3 as number,
       lineStatus: {
-        xt: false,
-        xc: false,
-        xb: false,
-        yl: false,
-        yc: false,
-        yr: false
+        xt: true,
+        xc: true,
+        xb: true,
+        yl: true,
+        yc: true,
+        yr: true
       }
     }
   },
   mounted() {
-    bus.on("move", ({ isDownward, isRightward }) => {
+    bus.on("move", (event) => {
+      // console.log(event)
+      const {isDownward, isRightward} = event;
       this.showLine(isDownward, isRightward)
     })
     bus.on("unmove", () => {
@@ -172,8 +174,10 @@ export default defineComponent({
             needToShow.push(condition.line)
           })
         })
-
+        
         if (needToShow.length) {
+          // console.log(needToShow)
+          // console.log(conditions)
           this.chooseLine(needToShow, isDownward, isRightward)
         }
       })
@@ -239,10 +243,12 @@ export default defineComponent({
 .xline {
   width: 100%;
   height: 1px;
+  // top:40px
 }
 
 .yline {
   width: 1px;
   height: 100%;
+  // left:50px;
 }
 </style>

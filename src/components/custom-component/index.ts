@@ -3,7 +3,8 @@ const components:string[] = [
   'VText',
   'VTest',
   'VButton',
-  'RectShape'
+  'RectShape',
+  'CircleShape'
 ]
 
 export const registerComponent = (app:App) =>{
