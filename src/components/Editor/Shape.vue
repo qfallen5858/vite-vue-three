@@ -9,15 +9,17 @@
   </div>
 </template>
 <script lang="ts">
+
 import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
 import { indexStore, composeStore, contextMenuStore, snapshotStore } from '@/store/index'
 import { mod360 } from '@/utils/translate';
-import {isPreventDrop} from "@/utils/utils"
+import { isPreventDrop } from "@/utils/utils"
 import bus from "@/utils/bus"
-const pointListForShape: string[] = ['lt', 't', 'rt', 'r', 'rb', 'b', 'lb', 'l'];
-const pointListForLine: string[] = ['l', 'r']
-const initialAngle = {
+import { TLineDotSide, TShapeDotSide, TOrientationCursor } from './type';
+const pointListForShape: TShapeDotSide[] = ['lt', 't', 'rt', 'r', 'rb', 'b', 'lb', 'l'];
+const pointListForLine: TLineDotSide[] = ['l', 'r']
+const initialAngle: { [key: string]: number } = {
   lt: 0,
   t: 45,
   rt: 90,
@@ -28,7 +30,7 @@ const initialAngle = {
   l: 315,
 }
 
-const angleToCursor = [
+const angleToCursor: { start: number, end: number, cursor: TOrientationCursor }[] = [
   { start: 338, end: 23, cursor: 'nw' },
   { start: 23, end: 68, cursor: 'n' },
   { start: 68, end: 113, cursor: 'ne' },
@@ -63,7 +65,7 @@ export default defineComponent({
   },
   data() {
     return {
-      cursors: {}
+      cursors: {} as {[key:string]:string}
     }
   },
   computed: {
@@ -74,7 +76,6 @@ export default defineComponent({
     if (this.curComponent) {
       this.cursors = this.getCursor();
     }
-    // this.getCursor();
   },
   methods: {
     ...mapActions(contextMenuStore, ['hideContextMenu']),
@@ -124,23 +125,23 @@ export default defineComponent({
     },
 
     handleMouseDownOnShape(e: MouseEvent) {
-      this.$nextTick(()=>{bus.emit('componentClick')})
+      this.$nextTick(() => { bus.emit('componentClick') })
       this.setInEditorStatus(true)
       this.setClickComponentStatus(true)
 
-      if(isPreventDrop(this.element.component)){
+      if (isPreventDrop(this.element.component)) {
         e.preventDefault()
       }
       e.stopPropagation()
 
       this.setCurComponent(this.element, this.index)
-      if(this.element.isLock){
+      if (this.element.isLock) {
         return;
       }
 
       this.cursors = this.getCursor()
 
-      const pos = {...this.defaultStyle};
+      const pos = { ...this.defaultStyle };
       const startX = e.clientX
       const startY = e.clientY
 
@@ -149,7 +150,7 @@ export default defineComponent({
 
       let hasMove = false;
 
-      const move = (moveEvent:MouseEvent) => {
+      const move = (moveEvent: MouseEvent) => {
         hasMove = true;
         const curX = moveEvent.clientX;
         const curY = moveEvent.clientY;
@@ -158,11 +159,11 @@ export default defineComponent({
 
         this.setShapeStyle(pos)
         this.$nextTick(() => {
-          bus.emit('move', {isDownward:curY - startY > 0, isRightward:curX - startX > 0})
+          bus.emit('move', { isDownward: curY - startY > 0, isRightward: curX - startX > 0 })
         })
       }
 
-      const up = (moveEvent:MouseEvent) => {
+      const up = (moveEvent: MouseEvent) => {
         hasMove && this.recordSnapshot()
         bus.emit('unmove')
         document.removeEventListener('mousemove', move)
@@ -172,7 +173,7 @@ export default defineComponent({
       document.addEventListener('mouseup', up)
     },
 
-    handleMouseDownOnPoint(item, e: MouseEvent) {
+    handleMouseDownOnPoint(item: string, e: MouseEvent) {
 
     },
     getPointStyle(point: string) {
@@ -213,21 +214,22 @@ export default defineComponent({
     isActive(): boolean {
       return this.active && !this.element?.isLock;
     },
-    getPointList(): string[] {
+    getPointList(): TShapeDotSide[] | TLineDotSide[] {
       if (this.element?.component === 'line-shape') {
         return pointListForLine
       } else {
         return pointListForShape
       }
     },
-    getCursor() {
+    getCursor():{[key:string]:string} {
       const rotate = this.curComponent.style.rotate;
-      const result = {}
-      let lastMatchIndex = -1 // 从上一个命中的角度的索引开始匹配下一个，降低时间复杂度
+      const result:{[key:string]:string} = {}
+      let lastMatchIndex:number = -1 // 从上一个命中的角度的索引开始匹配下一个，降低时间复杂度
       const pointList = this.getPointList();
-      pointList.forEach(point => {
-        const angle = mod360(initialAngle[point] + rotate)
-        const len = angleToCursor.length
+      const len: number = angleToCursor.length
+      pointList.forEach((point: string) => {
+        const angle: number = mod360(initialAngle[point] + rotate)
+
         // eslint-disable-next-line no-constant-condition
         while (true) {
           lastMatchIndex = (lastMatchIndex + 1) % len
